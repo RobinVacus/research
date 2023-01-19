@@ -1,0 +1,1 @@
+typeSearchIndex = [{"p":"pull_model","l":"Agent"},{"l":"All Classes","url":"allclasses-index.html"},{"p":"pull_model","l":"Dynamics"},{"p":"pull_model","l":"Initialization"},{"p":"pull_model","l":"LazyAgent"},{"p":"pull_model","l":"Main"},{"p":"pull_model","l":"SourceAgent"},{"p":"pull_model","l":"TrendAgent"},{"p":"pull_model","l":"Utils"},{"p":"pull_model","l":"VoterAgent"}]
