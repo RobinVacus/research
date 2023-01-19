@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Contains the {@link main(String[]) main} method.
  *
  */
-public class Simulation {
+public class Main {
 	
 	/**
 	 * Computes the average convergence time in parallel rounds.
