@@ -1,0 +1,19 @@
+package pull_model;
+
+/**
+ * Implementations of this interface must be able to generate
+ * a {@link Dynamics} ready for execution, with the specified population size.
+ * This is useful to repeat a simulation several times over similar initial configurations.
+ *
+ * @param <T> The type of opinions handled by the agents.
+ */
+public interface Initialization<T> {
+	
+	/**
+	 * 
+	 * @param n The population size.
+	 * @return A fresh {@link Dynamics} ready for execution.
+	 */
+	public Dynamics<T> initialize(int n);
+	
+}
