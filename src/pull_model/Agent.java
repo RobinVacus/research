@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Abstract agent class with no established behavior, to be used in {@link Dynamics}.
  * 
- * To define a dynamics, one only needs to extend this class and provide
+ * To define a behavior, one only needs to extend this class and provide
  * implementation for the {@link update(ArrayList) update} method.
  *
  * @param <T> The type of opinions handled by the agent.
