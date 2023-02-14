@@ -104,14 +104,17 @@ public class Main {
 		inits.add(Voter(true));
 		inits.add(Voter(false));
 		
-		for (int i=3 ; i<6 ; i++) {
+		for (int i=3 ; i<15 ; i++) {
 			
 			int n = (int) Math.pow(2,i);
 			System.out.println("n = "+n);
 			System.out.println("Follow the Trend (random): "+avgConvergenceTime(n,inits.get(0),100));
 			System.out.println("Follow the Trend (pseudo-consensus): "+avgConvergenceTime(n,inits.get(1),100));
-			System.out.println("Voter (random): "+avgConvergenceTime(n,inits.get(2),100));
-			System.out.println("Voter (pseudo-consensus): "+avgConvergenceTime(n,inits.get(3),100));
+			if (i<=10) {
+				System.out.println("Voter (random): "+avgConvergenceTime(n,inits.get(2),100));
+				System.out.println("Voter (pseudo-consensus): "+avgConvergenceTime(n,inits.get(3),100));
+			}
+			
 			
 		}
 		

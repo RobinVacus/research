@@ -3,7 +3,8 @@ package pull_model;
 /**
  * Implementations of this interface must be able to generate
  * a {@link Dynamics} ready for execution, with the specified population size.
- * This is useful to repeat a simulation several times over similar initial configurations.
+ * This is intended to repeat a simulation several times over similar initial configurations,
+ * possibly with different numbers of agents.
  *
  * @param <T> The type of opinions handled by the agents.
  */
