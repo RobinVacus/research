@@ -44,7 +44,7 @@ public class Main {
 	 * Otherwise, they will be taken to be different from the correct opinion.
 	 * @return An initialization of the "lazy follow the trend" dynamics.
 	 */
-	public static Initialization<Integer> FollowTheTrend(boolean randomOpinions) {
+	public static Initialization<Integer> FollowTheTrend(boolean randomOpinions, int numberOfOpinions) {
 		
 		return new Initialization<Integer>() {
 
@@ -56,7 +56,7 @@ public class Main {
 				
 				for (int i=1 ; i<n ; i++) {
 					
-					int opinion = randomOpinions ? Utils.random.nextInt(2) : 1;
+					int opinion = randomOpinions ? Utils.random.nextInt(numberOfOpinions) : 1;
 					agents.add(new LazyAgent<Integer>(new TrendAgent(l,opinion), l));
 					
 				}
@@ -76,7 +76,7 @@ public class Main {
 	 * Otherwise, they will be taken to be different from the correct opinion.
 	 * @return An initialization of the "Voter" dynamics.
 	 */
-	public static Initialization<Integer> Voter(boolean randomOpinions) {
+	public static Initialization<Integer> Voter(boolean randomOpinions, int numberOfOpinions) {
 		
 		return new Initialization<Integer>() {
 
@@ -86,7 +86,7 @@ public class Main {
 				agents.add(new SourceAgent<Integer>(0));
 				for (int i=1 ; i<n ; i++) {
 					
-					int opinion = randomOpinions ? Utils.random.nextInt(2) : 1;
+					int opinion = randomOpinions ? Utils.random.nextInt(numberOfOpinions) : 1;
 					agents.add(new VoterAgent<Integer>(opinion));
 				}
 				Dynamics<Integer> core = new Dynamics<Integer>(agents,false);
@@ -98,25 +98,66 @@ public class Main {
 	
 	public static void main(String [] args) {
 		
-		ArrayList<Initialization<Integer>> inits = new ArrayList<Initialization<Integer>>();
-		inits.add(FollowTheTrend(true));
-		inits.add(FollowTheTrend(false));
-		inits.add(Voter(true));
-		inits.add(Voter(false));
+		int nMin = Integer.valueOf(args[0]);
+		int nMax = Integer.valueOf(args[1]);
 		
-		for (int i=3 ; i<15 ; i++) {
+		int iterations = 1000;
+		
+		ArrayList<Initialization<Integer>> inits = new ArrayList<Initialization<Integer>>();
+		inits.add(FollowTheTrend(true,2));
+		inits.add(FollowTheTrend(false,2));
+		inits.add(FollowTheTrend(true,10));
+		inits.add(Voter(true,2));
+		inits.add(Voter(false,2));
+		inits.add(Voter(true,10));
+		
+		ArrayList<Integer> populationSize1 = new ArrayList<Integer>();
+		ArrayList<Integer> populationSize2 = new ArrayList<Integer>();
+		
+		ArrayList<ArrayList<Double>> results = new ArrayList<ArrayList<Double>>();
+		for (int i=0 ; i<6 ; i++) results.add(new ArrayList<Double>());
+		
+		
+		for (int i=nMin ; i<nMax ; i++) {
 			
 			int n = (int) Math.pow(2,i);
-			System.out.println("n = "+n);
+			populationSize1.add(n);
+			System.out.println("Processing n = "+n+";");
+			
+			results.get(0).add(avgConvergenceTime(n,inits.get(0),iterations));
+			results.get(1).add(avgConvergenceTime(n,inits.get(1),iterations));
+			results.get(2).add(avgConvergenceTime(n,inits.get(2),iterations));
+			if (i<=10) {
+				results.get(3).add(avgConvergenceTime(n,inits.get(3),iterations));
+				results.get(4).add(avgConvergenceTime(n,inits.get(4),iterations));
+				results.get(5).add(avgConvergenceTime(n,inits.get(5),iterations));
+				populationSize2.add(n);
+			}
+			
+			/*
 			System.out.println("Follow the Trend (random): "+avgConvergenceTime(n,inits.get(0),100));
 			System.out.println("Follow the Trend (pseudo-consensus): "+avgConvergenceTime(n,inits.get(1),100));
 			if (i<=10) {
 				System.out.println("Voter (random): "+avgConvergenceTime(n,inits.get(2),100));
 				System.out.println("Voter (pseudo-consensus): "+avgConvergenceTime(n,inits.get(3),100));
 			}
-			
+			*/
 			
 		}
+		
+		XMLWriter writer = new XMLWriter("test","xscale","log");
+		
+		writer.plot("populationSize1","data0","color","tab:blue","label","Follow the Trend","ls","-","marker","o");
+		writer.plot("populationSize1","data1","color","tab:blue","label","Follow the Trend (Pseudo-consensus)","ls","--","marker","o");
+		writer.plot("populationSize1","data2","color","tab:blue","label","Follow the Trend (10 opinions)","ls","dotted","marker","o");
+		writer.plot("populationSize2","data3","color","tab:orange","label","Voter","ls","-","marker","^");
+		writer.plot("populationSize2","data4","color","tab:orange","label","Voter (Pseudo-consensus)","ls","--","marker","^");
+		writer.plot("populationSize2","data5","color","tab:orange","label","Voter (10 opinions)","ls","dotted","marker","^");
+		
+		writer.addData("populationSize1",populationSize1);
+		writer.addData("populationSize2",populationSize2);
+		for (int i=0 ; i<6 ; i++) writer.addData("data"+i,results.get(i));
+		writer.close();
 		
 		System.out.println("Simulation over.");
 				
